@@ -1,0 +1,106 @@
+" File:        .vimrc
+" Author:      Gustavo Picon <tabo@aurealsys.com>
+" Last Change: 2005 Feb 11 (Vim 6.3)
+" Download:    http://tabo.aurealsys.com/code/vimrc
+" Home:        http://tabo.aurealsys.com/
+" License:     This file is placed in the publid domain
+" Disclaimer:  Published as-is, no support, no warranty
+
+
+set nocompatible               " VIM extensions, not very VI compatible;
+                               "   this setting must be set because when vim
+                               "   finds a .vimrc on startup, it will set
+                               "   itself as "compatible" with vi
+
+"
+" User Interface
+"
+
+" Syntax highlighting, only if the feature is available and the terminal can
+" display colors
+" (tabo@20040210) had to fix this because t_Co doesn't work in gvim@win32
+if has('syntax') && (&t_Co > 2 || has('win32'))
+    syntax on                  " enable syntax highlighting
+    colorscheme baycomb        " load a colorscheme, it's redundant to use
+                               "   'default', but this setting is here to be
+                               "   modified
+endif
+
+
+set backspace=indent,eol,start " backspace for dummys
+set showmatch                  " show matching brackets/parenthesis
+set wildmode=list:longest,full " comand <Tab> completion, list matches and
+                               "   complete the longest common part, then,
+                               "   cycle through the matches
+set shortmess+=filmnrxoOtT     " abbrev. of messages (avoids 'hit enter')
+set showmode                   " display the current mode
+
+if has('cmdline_info')
+    set ruler                  " show the ruler
+    " a ruler on steroids
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
+    set showcmd                " show partial commands in status line and
+                               "   selected characters/lines in visual mode
+endif
+
+if has('statusline')
+    set laststatus=1           " show statusline only if there are > 1 windows
+    " a statusline, also on steroids
+    set statusline=%<%f\ %=\:\b%n%y%m%r%w\ %l,%c%V\ %P
+endif
+
+"
+" Editing
+"
+
+filetype on                    " enable filetype detection
+set wrap                       " wrap long lines
+set autoindent                 " indent at the same level of the previous line
+set shiftwidth=4               " use indents of 4 spaces
+set textwidth=79               " the text width
+"set formatoptions+=tcq        " basic formatting of text and comments
+set matchpairs+=<:>            " match, to be used with %
+set expandtab                  " spaces instead of tabs, CTRL-V<Tab> to insert
+                               " a real space
+set pastetoggle=<F12>          " pastetoggle (sane indentation on pastes)
+                               "   just press F12 when you are going to
+                               "   paste several lines of text so they won't
+                               "   be indented
+                               "   When in paste mode, everything is inserted
+                               "   literally.
+
+autocmd FileType c,cpp call <SID>cstuff()
+function <SID>cstuff()
+    set cindent
+    set formatoptions+=croql
+    set formatoptions-=t
+endfunction
+
+"
+" gvim- (here instead of .gvimrc)"
+
+
+if has('gui_running')
+    set guioptions-=T          " remove the toolbar
+    set lines=40               " 40 lines of text instead of 24,
+                               "   perfect for 1024x768
+endif
+"
+
+" misc, there is _always_ a misc section
+"
+
+set nobackup                   " real men _never_ _ever_ do backups
+
+" i have been working with cobol lately, the horror
+au BufNewFile,BufRead *.CBL,*.cbl,*.cob     setf cobol
+
+
+
+" to please the gods
+iabbrev cthuf Ia! Ia! Cthulhu fhtagn! Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn! Cthulhu fhtagn! Cthulhu fhtagn!
+
+
+" vim: set sw=4 ts=8 sts=0 et tw=78 nofen fdm=indent ft=vim :
+
+
